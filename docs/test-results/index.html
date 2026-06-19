@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Results — SENNDER BUCHAREST SRL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #fdf6f0 0%, #f5e6d3 50%, #f0dcc8 100%);
+      color: #2d2a24;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    header {
+      text-align: center;
+      padding: 1.5rem 0 2rem;
+    }
+    .logo-img { height: 32px; width: auto; transition: opacity 0.2s; }
+    .logo-img:hover { opacity: 0.8; }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #c44536;
+      letter-spacing: -0.02em;
+      margin: 0.5rem 0 0.25rem;
+    }
+    header p { color: #7d6b5a; font-size: 0.9rem; }
+    .scraper-tag {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.3rem 0.85rem;
+      background: #e8d5c4;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #5a4a3a;
+    }
+
+    .card {
+      background: #fffcf9;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(90, 60, 40, 0.10);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .card-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid #f0e4d8;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #5a4a3a;
+    }
+    .card-body { padding: 1rem 1.5rem; }
+
+    .report-list { list-style: none; }
+    .report-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid #f0e4d8;
+    }
+    .report-item:last-child { border-bottom: none; }
+    .report-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      width: 2rem;
+      text-align: center;
+    }
+    .report-info { flex: 1; min-width: 0; }
+    .report-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #2d2a24;
+    }
+    .report-desc {
+      font-size: 0.78rem;
+      color: #7d6b5a;
+      margin-top: 0.15rem;
+    }
+    .report-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .badge-pre  { background: #e8f0fe; color: #1a56a5; }
+    .badge-post { background: #e8f5ec; color: #2e7d32; }
+
+    .report-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #c44536;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .report-link:hover { background: #a83828; transform: translateY(-1px); }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #c44536;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #9a8a7a;
+      font-size: 0.8rem;
+    }
+    footer a { color: #c44536; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <a href="https://peviitor.ro" target="_blank">
+      <img src="https://peviitor.ro/assets/logo-DV2JQkir.svg" alt="peviitor" class="logo-img">
+    </a>
+    <h1>Test Results</h1>
+    <p>Automated test reports — SENNDER BUCHAREST SRL scraper</p>
+    <div class="scraper-tag">job_seeker_ro_spider</div>
+  </header>
+
+  <a href="../" class="back-link">&#8592; Back to overview</a>
+
+  <div class="card">
+    <div class="card-header">Pre-scrape checks</div>
+    <div class="card-body">
+      <ul class="report-list">
+        <li class="report-item">
+          <div class="report-icon">🧪</div>
+          <div class="report-info">
+            <div class="report-title">Unit Tests</div>
+            <div class="report-desc">Pure function and transformation logic tests run before scraping</div>
+          </div>
+          <span class="report-badge badge-pre">pre-scrape</span>
+          <a class="report-link" href="pre-scrape-unit.html">View &#8594;</a>
+        </li>
+        <li class="report-item">
+          <div class="report-icon">🔗</div>
+          <div class="report-info">
+            <div class="report-title">Integration Tests</div>
+            <div class="report-desc">API connectivity and SOLR integration checks run before scraping</div>
+          </div>
+          <span class="report-badge badge-pre">pre-scrape</span>
+          <a class="report-link" href="pre-scrape-integration.html">View &#8594;</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Post-scrape checks</div>
+    <div class="card-body">
+      <ul class="report-list">
+        <li class="report-item">
+          <div class="report-icon">✅</div>
+          <div class="report-info">
+            <div class="report-title">E2E Tests</div>
+            <div class="report-desc">End-to-end validation of scraped jobs in SOLR after the scrape run</div>
+          </div>
+          <span class="report-badge badge-post">post-scrape</span>
+          <a class="report-link" href="post-scrape.html">View &#8594;</a>
+        </li>
+        <li class="report-item">
+          <div class="report-icon">📊</div>
+          <div class="report-info">
+            <div class="report-title">Consistency Tests</div>
+            <div class="report-desc">Cross-checks between jobs.md, SOLR, and the live source after scraping</div>
+          </div>
+          <span class="report-badge badge-post">post-scrape</span>
+          <a class="report-link" href="post-scrape-consistency.html">View &#8594;</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <a href="../">Overview</a> &middot;
+    <a href="https://github.com/sebiboga/sennder-bucharest-srl-nodejs-scraper" target="_blank">GitHub</a> &middot;
+    <a href="https://peviitor.ro/" target="_blank">peviitor.ro</a>
+  </footer>
+
+</div>
+</body>
+</html>
