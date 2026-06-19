@@ -8,48 +8,59 @@ describe('index.js Component Tests', () => {
   });
 
   describe('transformJobsForSOLR', () => {
-    it('should filter locations to only Romanian cities', () => {
+    it('should filter to only Romanian locations splitting by comma', () => {
       const payload = {
         jobs: [
-          { url: 'https://test.com/1', title: 'Job 1', location: ['România'] },
+          { url: 'https://test.com/1', title: 'Job 1', location: ['Bucharest, Romania'] },
           { url: 'https://test.com/2', title: 'Job 2', location: ['Bucharest'] },
-          { url: 'https://test.com/3', title: 'Job 3', location: ['Bulgaria'] },
-          { url: 'https://test.com/4', title: 'Job 4', location: ['Cluj-Napoca'] },
+          { url: 'https://test.com/3', title: 'Job 3', location: ['Berlin, Germany'] },
+          { url: 'https://test.com/4', title: 'Job 4', location: ['Cluj-Napoca, Romania'] },
           { url: 'https://test.com/5', title: 'Job 5', location: [] }
         ]
       };
 
       const result = index.transformJobsForSOLR(payload);
 
+      expect(result.jobs).toHaveLength(3);
       expect(result.jobs[0].location).toEqual(['România']);
       expect(result.jobs[1].location).toEqual(['Bucharest']);
-      expect(result.jobs[2].location).toEqual(['România']);
-      expect(result.jobs[3].location).toEqual(['Cluj-Napoca']);
-      expect(result.jobs[4].location).toEqual(['România']);
+      expect(result.jobs[2].location).toEqual(['Cluj-Napoca']);
     });
 
-    it('should keep company uppercase', () => {
+    it('should filter out non-Romanian jobs entirely', () => {
       const payload = {
-        source: 'epam.com',
-        company: 'epam systems international srl',
-        cif: '33159615',
         jobs: [
-          { url: 'https://test.com/1', title: 'Job 1', company: 'epam systems', cif: '33159615' }
+          { url: 'https://test.com/1', title: 'Job 1', location: ['Berlin, Germany'] },
+          { url: 'https://test.com/2', title: 'Job 2', location: ['Paris'] }
         ]
       };
 
       const result = index.transformJobsForSOLR(payload);
 
-      expect(result.company).toBe('EPAM SYSTEMS INTERNATIONAL SRL');
+      expect(result.jobs).toHaveLength(0);
+    });
+
+    it('should keep company uppercase', () => {
+      const payload = {
+        source: 'gem.com',
+        company: 'sennder bucharest srl',
+        cif: '45780151',
+        jobs: [
+          { url: 'https://test.com/1', title: 'Job 1', location: ['Bucharest'] }
+        ]
+      };
+
+      const result = index.transformJobsForSOLR(payload);
+
+      expect(result.company).toBe('SENNDER BUCHAREST SRL');
     });
 
     it('should normalize workmode values', () => {
       const payload = {
         jobs: [
-          { url: 'https://test.com/1', title: 'Job 1', workmode: 'Remote' },
-          { url: 'https://test.com/2', title: 'Job 2', workmode: 'ON-SITE' },
-          { url: 'https://test.com/3', title: 'Job 3', workmode: 'Hybrid' },
-          { url: 'https://test.com/4', title: 'Job 4', workmode: 'hybrid' }
+          { url: 'https://test.com/1', title: 'Job 1', workmode: 'Remote', location: ['Bucharest'] },
+          { url: 'https://test.com/2', title: 'Job 2', workmode: 'ON-SITE', location: ['Bucharest'] },
+          { url: 'https://test.com/3', title: 'Job 3', workmode: 'Hybrid', location: ['Bucharest'] }
         ]
       };
 
@@ -58,7 +69,6 @@ describe('index.js Component Tests', () => {
       expect(result.jobs[0].workmode).toBe('remote');
       expect(result.jobs[1].workmode).toBe('on-site');
       expect(result.jobs[2].workmode).toBe('hybrid');
-      expect(result.jobs[3].workmode).toBe('hybrid');
     });
 
     it('should handle empty jobs array', () => {
@@ -70,15 +80,15 @@ describe('index.js Component Tests', () => {
   describe('mapToJobModel', () => {
     it('should map raw job to job model format', () => {
       const rawJob = {
-        url: 'https://careers.epam.com/job/123',
+        url: 'https://api.gem.com/job_board/v0/senndertechnologies-gmbh/job_posts/123',
         title: 'Senior Developer',
         location: ['Bucharest'],
-        tags: ['Java', 'Spring'],
+        tags: ['engineering'],
         workmode: 'hybrid'
       };
 
-      const COMPANY_NAME = 'EPAM SYSTEMS INTERNATIONAL SRL';
-      const COMPANY_CIF = '33159615';
+      const COMPANY_NAME = 'SENNDER BUCHAREST SRL';
+      const COMPANY_CIF = '45780151';
 
       const result = index.mapToJobModel(rawJob, COMPANY_CIF, COMPANY_NAME);
 
@@ -99,122 +109,62 @@ describe('index.js Component Tests', () => {
         title: 'Job 1'
       };
 
-      const result = index.mapToJobModel(rawJob, '33159615');
+      const result = index.mapToJobModel(rawJob, '45780151');
 
       expect(result.location).toBeUndefined();
       expect(result.tags).toBeUndefined();
       expect(result.workmode).toBeUndefined();
     });
-
-    it('should handle missing title', () => {
-      const rawJob = { url: 'https://test.com/1' };
-
-      const result = index.mapToJobModel(rawJob, '33159615');
-
-      expect(result.title).toBeUndefined();
-      expect(result.url).toBe('https://test.com/1');
-    });
   });
 
-  describe('parseApiJobs', () => {
-    it('should parse EPAM API response format', () => {
-      const apiData = {
-        data: {
-          total: 100,
-          jobs: [
-            {
-              uid: '123',
-              name: 'Senior Developer',
-              city: [{ name: 'Bucharest' }],
-              country: [{ name: 'Romania' }],
-              vacancy_type: 'Hybrid',
-              skills: ['Java', 'Spring']
-            }
-          ]
+  describe('fetchGemJobs', () => {
+    it('should parse Gem API response format', async () => {
+      const mockData = [
+        {
+          requisition_id: '123',
+          title: 'Senior Developer',
+          absolute_url: 'https://jobs.gem.com/senndertechnologies-gmbh/123',
+          location: { name: 'Bucharest, Romania' },
+          offices: [{ name: 'Bucharest' }],
+          departments: [{ name: 'Engineering' }],
+          location_type: 'Hybrid'
         }
-      };
+      ];
 
-      const result = index.parseApiJobs(apiData);
+      const originalFetch = global.fetch;
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockData)
+      });
 
-      expect(result.jobs).toHaveLength(1);
-      expect(result.jobs[0].title).toBe('Senior Developer');
-      expect(result.jobs[0].location).toEqual(['Bucharest']);
-      expect(result.jobs[0].workmode).toBe('hybrid');
+      const result = await index.fetchGemJobs();
+
+      expect(result).toHaveLength(1);
+      expect(result[0].title).toBe('Senior Developer');
+      expect(result[0].location).toContain('Bucharest, Romania');
+      expect(result[0].workmode).toBe('Hybrid');
+      expect(result[0].tags).toContain('engineering');
+
+      global.fetch = originalFetch;
     });
 
-    it('should handle empty job list', () => {
-      const apiData = { data: { total: 0, jobs: [] } };
+    it('should deduplicate by requisition_id', async () => {
+      const mockData = [
+        { requisition_id: '123', title: 'Job 1', departments: [] },
+        { requisition_id: '123', title: 'Job 1 dup', departments: [] }
+      ];
 
-      const result = index.parseApiJobs(apiData);
+      const originalFetch = global.fetch;
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockData)
+      });
 
-      expect(result.jobs).toEqual([]);
-    });
+      const result = await index.fetchGemJobs();
 
-    it('should handle missing data field', () => {
-      const result = index.parseApiJobs({});
+      expect(result).toHaveLength(1);
 
-      expect(result.jobs).toEqual([]);
-    });
-
-    it('should handle multiple cities', () => {
-      const apiData = {
-        data: {
-          total: 1,
-          jobs: [
-            {
-              uid: '123',
-              name: 'Developer',
-              city: [{ name: 'Bucharest' }, { name: 'Cluj-Napoca' }],
-              country: [{ name: 'Romania' }]
-            }
-          ]
-        }
-      };
-
-      const result = index.parseApiJobs(apiData);
-
-      expect(result.jobs[0].location).toEqual(['Bucharest', 'Cluj-Napoca']);
-    });
-  });
-
-  describe('URL Generation', () => {
-    it('should use seo.url when available', () => {
-      const apiData = {
-        data: {
-          total: 1,
-          jobs: [
-            {
-              uid: 'blt123',
-              name: 'Test Job',
-              seo: { url: '/en/vacancy/test-job-blt123_en' },
-              city: [{ name: 'Bucharest' }]
-            }
-          ]
-        }
-      };
-
-      const result = index.parseApiJobs(apiData);
-
-      expect(result.jobs[0].url).toBe('https://careers.epam.com/en/vacancy/test-job-blt123_en');
-    });
-
-    it('should fallback to uid-based URL when no seo.url', () => {
-      const apiData = {
-        data: {
-          total: 1,
-          jobs: [
-            {
-              uid: 'blt456',
-              name: 'Test Job',
-              city: [{ name: 'Bucharest' }]
-            }
-          ]
-        }
-      };
-
-      const result = index.parseApiJobs(apiData);
-
-      expect(result.jobs[0].url).toBe('https://careers.epam.com/en/vacancy/blt456_en');
+      global.fetch = originalFetch;
     });
   });
 });

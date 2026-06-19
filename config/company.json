@@ -1,11 +1,10 @@
 {
-  "cif": "33159615",
-  "legalName": "EPAM SYSTEMS INTERNATIONAL SRL",
-  "brand": "EPAM",
-  "website": "https://www.epam.com",
-  "careerUrl": "https://careers.epam.com",
-  "apiBase": "https://careers.epam.com",
-  "apiCountryId": "8150000000000001155",
+  "cif": "45780151",
+  "legalName": "SENNDER BUCHAREST SRL",
+  "brand": "sennder",
+  "website": "https://www.sennder.com",
+  "careerUrl": "https://www.sennder.com/open-positions",
+  "apiBase": "https://api.gem.com/job_board/v0/senndertechnologies-gmbh",
   "defaultLocation": "București",
-  "scraperFile": "https://raw.githubusercontent.com/sebiboga/epam-systems-international-srl-nodejs-scraper/main/.github/workflows/job-seeker-ro-spider.yml"
+  "scraperFile": "https://raw.githubusercontent.com/sebiboga/sennder-bucharest-srl-nodejs-scraper/main/.github/workflows/job-seeker-ro-spider.yml"
 }

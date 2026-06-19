@@ -1,5 +1,5 @@
 {
-  "name": "scraper-epam-ro",
+  "name": "scraper-sennder-ro",
   "version": "1.5.0",
   "type": "module",
   "main": "index.js",
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "node-fetch": "^3.3.2",
-    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.0"
   },
   "devDependencies": {

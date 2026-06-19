@@ -1,16 +1,3 @@
-/**
- * EPAM-Specific Job URL Validator (fast, used by CI)
- *
- * Quick nightly cleanup pass over jobs in SOLR. Uses HEAD requests only.
- * Called by .github/workflows/automation-testing.yml on the scheduled run.
- *
- * For deep content-aware validation across any CIF, see validate-jobs.js
- * at the repo root.
- *
- * Flags:
- *   --dry-run    Show invalid jobs but do not delete
- *   --delete     Delete invalid jobs from SOLR after listing
- */
 import companyConfig from "../config/company.js";
 import { querySOLR, deleteJobByUrl } from "../solr.js";
 import { validateByHead } from "../src/job-validator.js";
