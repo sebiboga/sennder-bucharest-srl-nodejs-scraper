@@ -14,7 +14,7 @@
 
 ## Current Job Listings (4)
 
-_Generated: 2026-06-19T13:47:29.956Z_
+_Generated: 2026-06-19T14:52:27.318Z_
 
 ### Junior Operations Support - Bucharest (09:00 to 18:00 & 10:00 to 19:00)
 
