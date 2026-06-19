@@ -1,47 +1,40 @@
 {
-  "validatedAt": "2026-04-14T09:42:51.290Z",
+  "validatedAt": "2026-06-19T13:39:40.228Z",
   "source": "ANAF",
   "brand": "sennder",
   "anaf": {
     "cui": 45780151,
-    "name": "SENNDER BUCHAREST SRL",
-    "address": "MUNICIPIUL BUCUREŞTI, SECTOR 1, STR. PRIVIGHETORILOR, NR.27A, EL.4, AP.8",
-    "registrationNumber": "J2014005735405",
+    "name": "SENNDER BUCHAREST S.R.L.",
+    "address": "MUNICIPIUL BUCUREŞTI, SECTOR 6, BLD IULIU MANIU, NR.7, CLĂDIREA ONE COTROCENI PARK, ET.3",
+    "registrationNumber": "",
     "phone": "",
     "fax": "",
-    "postalCode": "11745",
-    "caenCode": "6220",
+    "postalCode": "",
+    "caenCode": "5229",
     "iban": "",
-    "registrationState": "TRANSFER(SOSIRE) din data 20.04.2022",
-    "registrationDate": "2014-05-14",
-    "fiscalAuthority": "Direcţia Generală a Finanţelor Publice Municipiul Bucureşti",
-    "ownershipForm": "PROPR.PRIVATA-CAPITAL PRIVAT STRAIN",
-    "organizationForm": "PERSOANA JURIDICA",
+    "registrationState": "",
+    "registrationDate": "",
+    "fiscalAuthority": "",
+    "ownershipForm": "",
+    "organizationForm": "",
     "legalForm": "SOCIETATE COMERCIALĂ CU RĂSPUNDERE LIMITATĂ",
     "vatRegistered": true,
-    "vatPeriods": [
-      {
-        "start": "2020-07-24",
-        "end": null,
-        "yearStart": "",
-        "message": ""
-      }
-    ],
+    "vatPeriods": [],
     "cashBasisVat": false,
     "cashBasisVatStart": null,
     "cashBasisVatEnd": null,
     "inactive": false,
-    "inactiveSince": "2018-12-27",
-    "reactivatedSince": "2020-05-13",
+    "inactiveSince": null,
+    "reactivatedSince": null,
     "splitVat": false,
     "eFacturaRegistered": false,
     "headquartersAddress": {
-      "street": "Bld. Iancu de Hunedoara",
-      "number": "48",
-      "locality": "Sector 1 Mun. Bucureşti",
+      "street": "Bld. Iuliu Maniu",
+      "number": "7",
+      "locality": "Sector 6 Mun. Bucureşti",
       "county": "MUNICIPIUL BUCUREŞTI",
       "country": "",
-      "postalCode": "11745"
+      "postalCode": ""
     },
     "fiscalAddress": {
       "street": "",
@@ -52,20 +45,23 @@
       "postalCode": ""
     },
     "administrators": [],
-    "authorizedCaenCodes": [],
-    "onrcStatus": 1048,
+    "authorizedCaenCodes": [
+      "5229",
+      "4941"
+    ],
+    "onrcStatus": null,
     "onrcStatusLabel": "Funcțiune"
   },
   "peviitor": null,
   "summary": {
-    "company": "SENNDER BUCHAREST SRL",
+    "company": "SENNDER BUCHAREST S.R.L.",
     "cif": "45780151",
     "active": true,
     "inactiveSince": null,
     "reactivatedSince": null,
-    "address": "MUNICIPIUL BUCUREŞTI, SECTOR 1, STR. PRIVIGHETORILOR, NR.27A, EL.4, AP.8",
-    "registrationNumber": "",
-    "caenCode": "",
+    "address": "MUNICIPIUL BUCUREŞTI, SECTOR 6, BLD IULIU MANIU, NR.7, CLĂDIREA ONE COTROCENI PARK, ET.3",
+    "registrationNumber": null,
+    "caenCode": "5229",
     "vatRegistered": true,
     "eFacturaRegistered": false
   }
