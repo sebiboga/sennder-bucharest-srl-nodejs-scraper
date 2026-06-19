@@ -460,7 +460,7 @@ async function loadStats() {
   }
 
   try {
-    const vRes = await fetch(`https://api.peviitor.ro/v1/search/?company=${encodeURIComponent(COMPANY)}&status=verified&page=1`, {
+      const vRes = await fetch(`https://api.peviitor.ro/v1/search/?cif=${COMPANY_CIF}&status=verified&page=1`, {
       headers: { origin: "https://peviitor.ro", referer: "https://peviitor.ro/" }
     });
     const vData = await vRes.json();
@@ -480,7 +480,7 @@ async function loadStats() {
     let hasMore = true;
 
     while (hasMore) {
-      const res = await fetch(`https://api.peviitor.ro/v1/search/?company=${encodeURIComponent(COMPANY)}&page=${page}`, {
+      const res = await fetch(`https://api.peviitor.ro/v1/search/?cif=${COMPANY_CIF}&page=${page}`, {
         headers: { origin: "https://peviitor.ro", referer: "https://peviitor.ro/" }
       });
       const data = await res.json();
