@@ -15,16 +15,6 @@
 
 **job_seeker_ro_spider** — un scraper pentru job-urile SENNDER BUCHAREST SRL din România. Extrage anunțurile de pe [sennder.com/open-positions](https://www.sennder.com/open-positions) prin API-ul Gem ATS și le publică în [peviitor.ro](https://peviitor.ro) prin API-ul SOLR.
 
-> **📐 Template repository.** Acest repo este **referința** pentru toate scraper-ele Node.js din ecosistemul peviitor.ro. Toate scraper-ele noi pentru alte companii din România ar trebui derivate din acest pattern. Vezi [CONTRIBUTING.md](CONTRIBUTING.md) pentru pașii de derivare.
->
-> **✅ Derivate validate:**
-> - [mejix-srl-nodejs-scraper](https://github.com/sebiboga/mejix-srl-nodejs-scraper) — MEJIX S.R.L. (HTML/cheerio, single-page)
-> - [talent-matchmakers-srl-nodejs-scraper](https://github.com/sebiboga/talent-matchmakers-srl-nodejs-scraper) — TALENT MATCHMAKERS S.R.L. (Teamtailor HTML/cheerio)
-> - [artsoft-consult-srl-nodejs-scraper](https://github.com/sebiboga/artsoft-consult-srl-nodejs-scraper) — ARTSOFT CONSULT SRL (HTML scraping/cheerio)
-> - [continental-hotels-srl-nodejs-scraper](https://github.com/sebiboga/continental-hotels-srl-nodejs-scraper) — CONTINENTAL HOTELS SA (POST AJAX → HTML/cheerio)
-> - [coera-bc-srl-nodejs-scraper](https://github.com/sebiboga/coera-bc-srl-nodejs-scraper) — COERA BC SRL (HTML/cheerio, single-page)
-> - [rapel-srl-nodejs-scraper](https://github.com/sebiboga/rapel-srl-nodejs-scraper) — RAPEL SRL (jobRapid.ro HTML/cheerio + ANOFM API)
-
 ## Overview
 
 Proiectul automatizează colectarea zilnică a job-urilor SENNDER BUCHAREST SRL din România, menținând board-ul peviitor.ro la zi cu cele mai recente oportunități de carieră.
