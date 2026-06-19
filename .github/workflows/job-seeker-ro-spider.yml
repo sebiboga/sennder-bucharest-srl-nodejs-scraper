@@ -1,0 +1,103 @@
+name: Oportunitati SI Cariere
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          
+      - name: Sync with remote
+        if: github.event_name != 'pull_request'
+        run: git pull origin main --rebase -X theirs
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Pre-scrape — Unit Tests
+        run: |
+          npm run test:unit
+          sed -i 's|<title>Test Report</title>|<title>Pre-scrape: Unit Tests — EPAM SYSTEMS INTERNATIONAL SRL</title>|;s|<h1 id="title">Test Report</h1>|<h1 id="title">Pre-scrape: Unit Tests — EPAM SYSTEMS INTERNATIONAL SRL</h1>|' test-report.html
+          cp test-report.html docs/test-results/pre-scrape-unit.html || true
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+
+      - name: Pre-scrape — Integration Tests
+        run: |
+          npm run test:integration
+          sed -i 's|<title>Test Report</title>|<title>Pre-scrape: Integration Tests — EPAM SYSTEMS INTERNATIONAL SRL</title>|;s|<h1 id="title">Test Report</h1>|<h1 id="title">Pre-scrape: Integration Tests — EPAM SYSTEMS INTERNATIONAL SRL</h1>|' test-report.html
+          cp test-report.html docs/test-results/pre-scrape-integration.html || true
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+
+      - name: Run scraper
+        run: npm run scrape
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+          
+      - name: Check for new jobs
+        run: |
+          if [ -f tmp/jobs.json ]; then
+            echo "New jobs found:"
+            cat tmp/jobs.json | jq '.jobs | length'
+          else
+            echo "No new jobs or scrape failed"
+          fi
+
+      - name: Post-scrape — E2E Tests
+        run: |
+          npm run test:e2e
+          sed -i 's|<title>Test Report</title>|<title>Post-scrape: E2E Tests — EPAM SYSTEMS INTERNATIONAL SRL</title>|;s|<h1 id="title">Test Report</h1>|<h1 id="title">Post-scrape: E2E Tests — EPAM SYSTEMS INTERNATIONAL SRL</h1>|' test-report.html
+          cp test-report.html docs/test-results/post-scrape.html || true
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+
+      - name: Consistency Tests
+        run: |
+          npm run test:consistency
+          sed -i 's|<title>Test Report</title>|<title>Post-scrape: Consistency Tests — EPAM SYSTEMS INTERNATIONAL SRL</title>|;s|<h1 id="title">Test Report</h1>|<h1 id="title">Post-scrape: Consistency Tests — EPAM SYSTEMS INTERNATIONAL SRL</h1>|' test-report.html
+          cp test-report.html docs/test-results/post-scrape-consistency.html || true
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: docs/test-results/
+          retention-days: 30
+
+      - name: Push test results to docs/
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/test-results/
+          git add docs/jobs.md || true
+          git commit -m "[skip ci] Update test results" || echo "No changes to commit"
+          git push || echo "Push failed (race condition) — will be picked up next run"
+          
+      - name: Upload jobs JSON
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: scraped-jobs
+          path: |
+            tmp/jobs.json
+            tmp/jobs_existing.json
+          retention-days: 7
