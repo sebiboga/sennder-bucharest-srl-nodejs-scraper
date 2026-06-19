@@ -26,8 +26,9 @@ const DEFAULT_USER_AGENT = "job_seeker_ro_spider";
 const DEFAULT_TIMEOUT_MS = 15000;
 
 /**
- * HEAD-only validator. Returns the URL active if status is 2xx/3xx, expired
- * otherwise. Fast — used by CI nightly cleanup.
+ * HEAD-first validator. Falls back to GET if the server returns 405 (Method Not
+ * Allowed) — some job board APIs (e.g. Gem) don't support HEAD and return 405,
+ * which caused active jobs to be incorrectly marked expired and deleted.
  */
 export async function validateByHead(url, { userAgent = DEFAULT_USER_AGENT } = {}) {
   try {
@@ -36,6 +37,20 @@ export async function validateByHead(url, { userAgent = DEFAULT_USER_AGENT } = {
       headers: { "User-Agent": userAgent },
       redirect: "follow"
     });
+    if (res.status === 405) {
+      const getRes = await fetch(url, {
+        method: "GET",
+        headers: { "User-Agent": userAgent },
+        redirect: "follow"
+      });
+      return {
+        url,
+        status: getRes.ok ? "active" : "expired",
+        httpStatus: getRes.status,
+        title: null,
+        error: null
+      };
+    }
     return {
       url,
       status: res.ok ? "active" : "expired",
