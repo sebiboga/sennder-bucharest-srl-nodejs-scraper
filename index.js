@@ -74,10 +74,8 @@ async function fetchGemJobs() {
     throw new Error(`Expected array from Gem API, got ${typeof data}`);
   }
   const allJobs = [];
-  const seenIds = new Set();
   for (const post of data) {
-    if (!post.requisition_id || seenIds.has(post.requisition_id)) continue;
-    seenIds.add(post.requisition_id);
+    if (!post.requisition_id) continue;
     const location = [];
     if (post.location?.name) {
       location.push(post.location.name);
@@ -104,7 +102,7 @@ async function fetchGemJobs() {
       workmode: post.location_type || undefined
     });
   }
-  console.log(`Gem API: ${data.length} posts, ${allJobs.length} unique jobs`);
+  console.log(`Gem API: ${allJobs.length} jobs`);
   return allJobs;
 }
 
