@@ -1,6 +1,6 @@
 # PUBLIC.md — Repository Must Be PUBLIC
 
-All scrapers derived from this template **MUST** be **PUBLIC** repositories.
+All scrapers **MUST** be **PUBLIC** repositories.
 
 ## Why?
 

@@ -1,6 +1,6 @@
 # BRANCH.md — Default Branch Must Be `main`
 
-All scrapers derivate din acest template **MUST** folosi `main` ca default branch.
+All scrapers **MUST** folosi `main` ca default branch.
 
 ## De ce `main`?
 
