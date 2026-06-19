@@ -49,15 +49,15 @@ function solrResponse(numFound, docs) {
   };
 }
 
-const EPAM_ANAF_RECORD = {
-  cui: 33159615,
-  name: 'EPAM SYSTEMS INTERNATIONAL SRL',
-  address: 'IANCU DE HUNEDOARA, 48, Bucureşti Sectorul 1, Bucureşti',
-  caenCode: '6220',
+const MOCK_ANAF_RECORD = {
+  cui: 45780151,
+  name: 'SENNDER BUCHAREST S.R.L.',
+  address: 'Strada Zborului 15, Bucureşti Sectorul 3, Bucureşti',
+  caenCode: '4941',
   inactive: false,
   vatRegistered: true,
   eFacturaRegistered: false,
-  headquartersAddress: { locality: 'Bucureşti Sectorul 1' }
+  headquartersAddress: { locality: 'Bucureşti Sectorul 3' }
 };
 
 describe('company.js', () => {
@@ -83,16 +83,16 @@ describe('company.js', () => {
   });
 
   describe('getCompanyData (no cache)', () => {
-    it('should fetch EPAM via direct CIF lookup and return company data', async () => {
-      mockFetch.mockResolvedValueOnce(anafCompanyResponse(EPAM_ANAF_RECORD));
+    it('should fetch company via direct CIF lookup and return company data', async () => {
+      mockFetch.mockResolvedValueOnce(anafCompanyResponse(MOCK_ANAF_RECORD));
 
       const result = await company.getCompanyData();
 
-      expect(result).toHaveProperty('company', 'EPAM SYSTEMS INTERNATIONAL SRL');
-      expect(result).toHaveProperty('cif', '33159615');
+      expect(result).toHaveProperty('company', 'SENNDER BUCHAREST S.R.L.');
+      expect(result).toHaveProperty('cif', '45780151');
       expect(result).toHaveProperty('active', true);
       expect(result).toHaveProperty('anafData');
-      expect(result.anafData.name).toBe('EPAM SYSTEMS INTERNATIONAL SRL');
+      expect(result.anafData.name).toBe('SENNDER BUCHAREST S.R.L.');
     });
 
     it('should throw when ANAF returns no data', async () => {
@@ -102,7 +102,7 @@ describe('company.js', () => {
     });
 
     it('should throw when ANAF returns no company name', async () => {
-      mockFetch.mockResolvedValueOnce(anafCompanyResponse({ cui: 33159615, name: null }));
+      mockFetch.mockResolvedValueOnce(anafCompanyResponse({ cui: 45780151, name: null }));
 
       await expect(company.getCompanyData()).rejects.toThrow('ANAF returned no company name');
     });
@@ -111,10 +111,10 @@ describe('company.js', () => {
   describe('getCompanyData (with cache)', () => {
     const cachedData = {
       validatedAt: new Date().toISOString(),
-      anaf: EPAM_ANAF_RECORD,
+      anaf: MOCK_ANAF_RECORD,
       summary: {
-        company: 'EPAM SYSTEMS INTERNATIONAL SRL',
-        cif: '33159615',
+        company: 'SENNDER BUCHAREST S.R.L.',
+        cif: '45780151',
         active: true
       }
     };
@@ -126,8 +126,8 @@ describe('company.js', () => {
     it('should use cached company data when available', async () => {
       const result = await company.getCompanyData();
 
-      expect(result.company).toBe('EPAM SYSTEMS INTERNATIONAL SRL');
-      expect(result.cif).toBe('33159615');
+      expect(result.company).toBe('SENNDER BUCHAREST S.R.L.');
+      expect(result.cif).toBe('45780151');
       expect(result.active).toBe(true);
       expect(mockFetch).not.toHaveBeenCalled();
     });
@@ -140,26 +140,26 @@ describe('company.js', () => {
 
     it('should return company data with status active', async () => {
       mockFetch
-        .mockResolvedValueOnce(anafCompanyResponse(EPAM_ANAF_RECORD))
+        .mockResolvedValueOnce(anafCompanyResponse(MOCK_ANAF_RECORD))
         .mockResolvedValueOnce(solrResponse(5, [
           { url: 'https://test.com/1', title: 'Job 1' },
           { url: 'https://test.com/2', title: 'Job 2' }
         ]))
-        .mockResolvedValueOnce(peviitorResponse([{ company: 'EPAM SYSTEMS INTERNATIONAL SRL' }]));
+        .mockResolvedValueOnce(peviitorResponse([{ company: 'SENNDER BUCHAREST S.R.L.' }]));
 
       const result = await company.validateAndGetCompany();
 
       expect(result).toHaveProperty('status', 'active');
-      expect(result).toHaveProperty('company', 'EPAM SYSTEMS INTERNATIONAL SRL');
-      expect(result).toHaveProperty('cif', '33159615');
+      expect(result).toHaveProperty('company', 'SENNDER BUCHAREST S.R.L.');
+      expect(result).toHaveProperty('cif', '45780151');
       expect(result).toHaveProperty('existingJobsCount');
       expect(typeof result.existingJobsCount).toBe('number');
     });
 
-    // Epam e activă — testul inactive se rulează doar dacă firma e inactivă
-    if (EPAM_ANAF_RECORD.inactive) {
+    // Compania e activă — testul inactive se rulează doar dacă firma e inactivă
+    if (MOCK_ANAF_RECORD.inactive) {
       it('should return inactive status when company is inactive', async () => {
-        const inactiveRecord = { ...EPAM_ANAF_RECORD, inactive: true };
+        const inactiveRecord = { ...MOCK_ANAF_RECORD, inactive: true };
 
         mockFetch
           .mockResolvedValueOnce(anafCompanyResponse(inactiveRecord))
