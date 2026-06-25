@@ -10,19 +10,11 @@
 | Location | MUNICIPIUL BUCUREŞTI, SECTOR 6, BLD IULIU MANIU, NR.7, CLĂDIREA ONE COTROCENI PARK, ET.3 |
 | Website | [https://www.sennder.com](https://www.sennder.com) |
 | Careers | [https://www.sennder.com/open-positions](https://www.sennder.com/open-positions) |
-| Last Scraped | 2026-06-23 |
+| Last Scraped | 2026-06-25 |
 
-## Current Job Listings (4)
+## Current Job Listings (3)
 
-_Generated: 2026-06-23T09:26:22.512Z_
-
-### Junior Operations Support - Bucharest (09:00 to 18:00 & 10:00 to 19:00)
-
-- **URL:** [https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDopp-7zU9kKj9RTi82h7FjZ](https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDopp-7zU9kKj9RTi82h7FjZ)
-- **Work Mode:** hybrid
-- **Location:** Bucharest
-- **Tags:** global operations
-- **Status:** scraped
+_Generated: 2026-06-25T08:50:55.532Z_
 
 ### Junior Operations Support (2 rotative shifts or regular schedule)
 
@@ -45,5 +37,5 @@ _Generated: 2026-06-23T09:26:22.512Z_
 - **URL:** [https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDoXP_LkO5xsYneP2LIcwQWJ](https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDoXP_LkO5xsYneP2LIcwQWJ)
 - **Work Mode:** on-site
 - **Location:** Bucharest
-- **Tags:** carriers
+- **Tags:** account operations
 - **Status:** scraped
