@@ -10,11 +10,11 @@
 | Location | MUNICIPIUL BUCUREŞTI, SECTOR 6, BLD IULIU MANIU, NR.7, CLĂDIREA ONE COTROCENI PARK, ET.3 |
 | Website | [https://www.sennder.com](https://www.sennder.com) |
 | Careers | [https://www.sennder.com/open-positions](https://www.sennder.com/open-positions) |
-| Last Scraped | 2026-06-25 |
+| Last Scraped | 2026-06-26 |
 
 ## Current Job Listings (3)
 
-_Generated: 2026-06-25T08:50:55.532Z_
+_Generated: 2026-06-26T08:53:19.407Z_
 
 ### Junior Operations Support (2 rotative shifts or regular schedule)
 
