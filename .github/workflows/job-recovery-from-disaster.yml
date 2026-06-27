@@ -1,0 +1,79 @@
+name: Recovery from DISASTER
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Check only without making changes'
+        required: true
+        default: 'true'
+
+jobs:
+  restore-company-core:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install
+
+      - name: Restore company in SOLR company core
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+        run: |
+          set -e
+          CIF=$(jq -r '.cif' config/company.json)
+          LEGAL_NAME=$(jq -r '.legalName' config/company.json)
+          BRAND=$(jq -r '.brand' config/company.json)
+          WEBSITE=$(jq -r '.website' config/company.json)
+          CAREER=$(jq -r '.careerUrl' config/company.json)
+          DEFAULT_LOC=$(jq -r '.defaultLocation' config/company.json)
+          SCRAPER_FILE=$(jq -r '.scraperFile' config/company.json)
+          TODAY=$(date -u +%Y-%m-%d)
+          echo "=== Target state ==="
+          echo "CIF: $CIF | Company: $LEGAL_NAME | Brand: $BRAND"
+          BEFORE=$(curl -s --user "${SOLR_AUTH}" "https://solr.peviitor.ro/solr/company/select?q=id:${CIF}&rows=1")
+          echo "=== Current ==="
+          echo "$BEFORE" | jq '.response.docs[0] // {numFound: 0}'
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then echo "⚠️ DRY RUN"; exit 0; fi
+          echo "=== Deleting old entry ==="
+          curl -s --user "${SOLR_AUTH}" "https://solr.peviitor.ro/solr/company/update?commit=true" -X POST -H "Content-Type: text/xml" --data-binary "<delete><id>${CIF}</id></delete>"
+          echo "=== Creating fresh entry ==="
+          jq -n --arg id "$CIF" --arg company "$LEGAL_NAME" --arg brand "$BRAND" --arg website "$WEBSITE" --arg career "$CAREER" --arg loc "$DEFAULT_LOC" --arg today "$TODAY" --arg scraperFile "$SCRAPER_FILE" '[{id:$id,company:$company,brand:$brand,status:"activ",location:[$loc],website:[$website],career:[$career],lastScraped:$today,scraperFile:$scraperFile}]' > company_data.json
+          cat company_data.json | jq .
+          curl -s --user "${SOLR_AUTH}" "https://solr.peviitor.ro/solr/company/update/json?commit=true" -X POST -H "Content-Type: application/json" --data-binary @company_data.json
+          echo "=== Verification ==="
+          AFTER=$(curl -s --user "${SOLR_AUTH}" "https://solr.peviitor.ro/solr/company/select?q=id:${CIF}&rows=1")
+          VERIFIED=true
+          check_field() { local l="$1" e="$2" a="$3"; if [ "$a" = "null" ] || [ "$a" = "" ]; then echo "❌ $l: MISSING"; VERIFIED=false; elif [ "$a" != "$e" ]; then echo "❌ $l: expected '$e', got '$a'"; VERIFIED=false; else echo "✅ $l: $a"; fi; }
+          check_array() { local l="$1" a="$2"; local t=$(echo "$a" | jq -r 'type'); if [ "$t" != "array" ]; then echo "❌ $l: not array ($t)"; VERIFIED=false; else echo "✅ $l: array ($(echo "$a" | jq 'length') items)"; fi; }
+          check_url() { local l="$1" v="$2"; if [[ ! "$v" =~ ^https?:// ]]; then echo "❌ $l: not URL: $v"; VERIFIED=false; else echo "✅ $l: $v"; fi; }
+          check_date() { local l="$1" v="$2"; if [[ ! "$v" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then echo "❌ $l: not YYYY-MM-DD: $v"; VERIFIED=false; else echo "✅ $l: $v"; fi; }
+          D=$(echo "$AFTER" | jq '.response.docs[0]')
+          check_field "CIF" "$CIF" "$(echo "$D" | jq -r '.id')"
+          check_field "Company" "$LEGAL_NAME" "$(echo "$D" | jq -r '.company')"
+          check_field "Brand" "$BRAND" "$(echo "$D" | jq -r '.brand')"
+          check_field "Status" "activ" "$(echo "$D" | jq -r '.status')"
+          check_array "Location" "$(echo "$D" | jq '.location')"
+          check_array "Website" "$(echo "$D" | jq '.website')"
+          check_array "Career" "$(echo "$D" | jq '.career')"
+          check_field "scraperFile" "$SCRAPER_FILE" "$(echo "$D" | jq -r '.scraperFile')"
+          WEB_URL=$(echo "$D" | jq -r '.website[0] // ""'); CAREER_URL=$(echo "$D" | jq -r '.career[0] // ""'); LAST_DATE=$(echo "$D" | jq -r '.lastScraped // ""')
+          [ -n "$WEB_URL" ] && check_url "Website[0]" "$WEB_URL"; [ -n "$CAREER_URL" ] && check_url "Career[0]" "$CAREER_URL"; [ -n "$LAST_DATE" ] && check_date "lastScraped" "$LAST_DATE"
+          echo ""; if [ "$VERIFIED" = true ]; then echo "✅✅✅ RECOVERY COMPLETE"; else echo "❌❌❌ FAILED"; exit 1; fi
+
+      - name: Run Integration Tests
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+        run: npm run test:integration
+
+      - name: Run E2E Tests
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+        run: npm run test:e2e
