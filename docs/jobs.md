@@ -7,22 +7,14 @@
 | CIF | 45780151 |
 | Brand | sennder |
 | Status | activ |
-| Location | MUNICIPIUL BUCUREŞTI, SECTOR 6, BLD IULIU MANIU, NR.7, CLĂDIREA ONE COTROCENI PARK, ET.3 |
+| Location | Serg. Nutu Ion, 44, Bucureşti Sectorul 5, Bucureşti |
 | Website | [https://www.sennder.com](https://www.sennder.com) |
 | Careers | [https://www.sennder.com/open-positions](https://www.sennder.com/open-positions) |
-| Last Scraped | 2026-06-26 |
+| Last Scraped | 2026-06-27 |
 
-## Current Job Listings (3)
+## Current Job Listings (1)
 
-_Generated: 2026-06-26T08:53:19.407Z_
-
-### Junior Operations Support (2 rotative shifts or regular schedule)
-
-- **URL:** [https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDq9j_Qc06bwQ9mkBWMyosFm](https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDq9j_Qc06bwQ9mkBWMyosFm)
-- **Work Mode:** hybrid
-- **Location:** Bucharest
-- **Tags:** global operations
-- **Status:** scraped
+_Generated: 2026-06-27T12:17:33.556Z_
 
 ### Intern, Tender Management (with Italian)
 
@@ -30,12 +22,4 @@ _Generated: 2026-06-26T08:53:19.407Z_
 - **Work Mode:** on-site
 - **Location:** Bucharest
 - **Tags:** tender and pricing
-- **Status:** scraped
-
-### Senior International Road Freight Forwarder - Bucharest
-
-- **URL:** [https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDoXP_LkO5xsYneP2LIcwQWJ](https://jobs.gem.com/senndertechnologies-gmbh/am9icG9zdDoXP_LkO5xsYneP2LIcwQWJ)
-- **Work Mode:** on-site
-- **Location:** Bucharest
-- **Tags:** account operations
 - **Status:** scraped
