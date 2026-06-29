@@ -10,11 +10,11 @@
 | Location | Serg. Nutu Ion, 44, Bucureşti Sectorul 5, Bucureşti |
 | Website | [https://www.sennder.com](https://www.sennder.com) |
 | Careers | [https://www.sennder.com/open-positions](https://www.sennder.com/open-positions) |
-| Last Scraped | 2026-06-27 |
+| Last Scraped | 2026-06-29 |
 
 ## Current Job Listings (1)
 
-_Generated: 2026-06-27T12:17:33.556Z_
+_Generated: 2026-06-29T10:28:13.674Z_
 
 ### Intern, Tender Management (with Italian)
 
